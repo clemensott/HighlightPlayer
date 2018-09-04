@@ -1,0 +1,205 @@
+﻿<Window x:Class="HighlightPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HighlightPlayer"
+        xmlns:controls="clr-namespace:HighlightPlayer.Controls"
+        xmlns:con="clr-namespace:HighlightPlayer.Converter"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:win="clr-namespace:System.Windows;assembly=PresentationFramework"
+        mc:Ignorable="d"
+        Title="Highlight Player" Height="650" Width="625"
+        Loaded="Window_Loaded" Closed="Window_Closed">
+
+    <Window.Resources>
+        <sys:Double x:Key="buttonWidthAndHeight">30</sys:Double>
+        <win:GridLength x:Key="buttonWidth">30</win:GridLength>
+        <win:Thickness x:Key="buttonMarginSmall">5,0,0,0</win:Thickness>
+        <win:Thickness x:Key="buttonMarginBig">15,0,0,0</win:Thickness>
+
+        <controls:HighlightButtonStates x:Key="btsHighlights" />
+        <controls:LoopButtonStates x:Key="btsLoop" />
+        <controls:NextHighlightButtonStates x:Key="btsNextHightlight" />
+        <controls:NextMediaButtonStates x:Key="btsNextMedia" />
+        <controls:PlayPauseButtonStates x:Key="btsPlayPause" />
+        <controls:PlayTypeButtonStates x:Key="btsPlayType" />
+        <controls:PreviousHighlightButtonStates x:Key="btsPreviousHighlight" />
+        <controls:PreviousMediaButtonStates x:Key="btsPreviousMedia" />
+        <controls:ShowHighlightsButtonStates x:Key="btsShowHighlights" />
+        <controls:ShuffleButtonStates x:Key="btsShuffle" />
+        <controls:StopButtonStates x:Key="btsStop" />
+        <controls:SwitchViewButtonStates x:Key="btsSwitchView" />
+
+        <con:SwitchViewToVisibilityConverter x:Key="visibilityConverter"/>
+        <con:MediaFileNameConverter x:Key="mediaFileNameConverter"/>
+        <con:CurrentHighlightsWidthConverter x:Key="currentHighlightsWidthConverter"/>
+        <con:ColumnNumberConverter x:Key="columnNumberConverter"/>
+        <con:VerticalAlignmentConverter x:Key="verticalAlignmentConverter"/>
+
+        <con:MediaFileToHighlightCollectionConverter x:Key="highlightsConverter"/>
+        <con:MediaStateConverter x:Key="mediaStateConverter"/>
+        <con:DurationToTimeSpanConverter x:Key="durationConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="{Binding ElementName=btnShowHighlights,Path=CurrentValue,Mode=TwoWay,
+                                    Converter={StaticResource currentHighlightsWidthConverter}}"/>
+            </Grid.ColumnDefinitions>
+
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+
+            <controls:HighlightsDataGrid Grid.Column="2" DataContext="{Binding Manager}"
+                                         HighlightsSource="{Binding Source, 
+                                           Converter={StaticResource highlightsConverter}}"
+                                         CurrentHighlights="{Binding CurrentHighlights}" 
+                                         CanUserAddRows="True" CanUserDeleteRows="True"
+                                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+            <controls:MediaFilesDataGrid ItemsSource="{Binding MediaFiles}" 
+                                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                         PlayMediaFile="{Binding Manager.Source,Mode=TwoWay}"
+                                         Visibility="{Binding ElementName=btnSwitchView,Path=CurrentValue,
+                                           Converter={StaticResource visibilityConverter}}"/>
+
+            <MediaElement x:Name="player" LoadedBehavior="Manual" ScrubbingEnabled="True"
+                          HorizontalAlignment="Stretch" Volume="0"
+                          Grid.Column="{Binding ElementName=btnSwitchView,Path=CurrentValue,
+                            Converter={StaticResource columnNumberConverter}}"
+                          VerticalAlignment="{Binding ElementName=btnSwitchView,Path=CurrentValue,
+                            Converter={StaticResource verticalAlignmentConverter}}"/>
+        </Grid>
+
+        <controls:MediaPositionSlider Grid.Row="1" x:Name="mps" Margin="5"
+                                      DataContext="{Binding Manager}"
+                                      MediaPosition="{Binding Position,Mode=TwoWay}"
+                                      MediaDuration="{Binding NaturalDuration,
+                                          Converter={StaticResource ResourceKey=durationConverter}}"
+                                      Highlights="{Binding Source,
+                                          Converter={StaticResource ResourceKey=highlightsConverter}}"/>
+
+        <StackPanel Grid.Row="2"  Orientation="Horizontal" Margin="0,5">
+            <controls:StateButton x:Name="btnPreviousMedia"
+                                  Source="{StaticResource btsPreviousMedia}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="30"
+                                  IconRatio="1"
+                                  Click="BtnPreviousMedia_Click"/>
+            <controls:StateButton x:Name="btnPreviousHighlight"
+                                  Source="{StaticResource btsPreviousHighlight}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  IconRatio="1.5"
+                                  Click="BtnPreviousHighlight_Click"/>
+            <controls:StateButton x:Name="btnPlayPause"
+                                  Source="{StaticResource btsPlayPause}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  DataContext="{Binding Manager}"
+                                  CurrentValue="{Binding State,Mode=TwoWay}"
+                                  Click="BtnPlayPause_Click"/>
+            <controls:StateButton x:Name="btnStop"
+                                  Source="{StaticResource btsStop}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="25"
+                                  Click="BtnStop_Click"/>
+            <controls:StateButton x:Name="btnNextHighlight"
+                                  Source="{StaticResource btsNextHightlight}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  IconRatio="1.5"
+                                  Click="BtnNextHighlight_Click"/>
+            <controls:StateButton x:Name="btnNextMedia"
+                                  Source="{StaticResource btsNextMedia}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="30"
+                                  IconRatio="1"
+                                  Click="BtnNextMedia_Click"/>
+
+            <controls:StateButton x:Name="btnShuffle"
+                                  Source="{StaticResource btsShuffle}"
+                                  Margin="{StaticResource buttonMarginBig}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="15"
+                                  IconRatio="1.8"
+                                  CurrentValue="{Binding ShuffleType,Mode=TwoWay}"
+                                  Click="BtnShuffle_Click"/>
+            <controls:StateButton x:Name="btnLoop"
+                                  Source="{StaticResource btsLoop}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  IconRatio="1"
+                                  CurrentValue="{Binding LoopType,Mode=TwoWay}"
+                                  Click="BtnLoop_Click"/>
+
+            <controls:StateButton x:Name="btnSwitchView" 
+                                  Source="{StaticResource btsSwitchView}"
+                                  Margin="{StaticResource buttonMarginBig}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  IconRatio="1.3"
+                                  CurrentValue="{Binding ViewType,Mode=TwoWay}"
+                                  Click="BtnSwitchView_Click"/>
+            <controls:StateButton x:Name="btnShowHighlights" 
+                                  Source="{StaticResource btsShowHighlights}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  IconRatio="1"
+                                  CurrentValue="{Binding ShowHighlights,Mode=TwoWay}"
+                                  Click="BtnSwitchView_Click"/>
+
+            <controls:StateButton x:Name="btnPlayType"
+                                  Source="{StaticResource btsPlayType}"
+                                  Margin="{StaticResource buttonMarginBig}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="15"
+                                  IconRatio="1.5"
+                                  DataContext="{Binding Manager}"
+                                  CurrentValue="{Binding Mode,Mode=TwoWay}"
+                                  Click="BtnPlayType_Click"/>
+            <controls:StateButton x:Name="btnHighlight"
+                                  Source="{StaticResource btsHighlights}"
+                                  Margin="{StaticResource buttonMarginSmall}" 
+                                  Width="{StaticResource buttonWidthAndHeight}"
+                                  Height="{StaticResource buttonWidthAndHeight}"
+                                  InnerMarginPercent="20"
+                                  IconRatio="0.5"
+                                  CurrentValue="{Binding ElementName=mps,Path=HighlightState,Mode=TwoWay}"
+                                  Click="BtnHighlight_Click"/>
+        </StackPanel>
+
+
+        <TextBlock Grid.Row="4" Text="Debug" x:Name="tblDebug"/>
+    </Grid>
+</Window>

@@ -1,0 +1,11 @@
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\HighlightLib.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\HighlightLib.pdb
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\GleamTech.Core.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\ID3TagLib.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\NReco.VideoConverter.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\GleamTech.Core.xml
+D:\Projects\HighlightPlayer\HighlightLib\bin\Release\NReco.VideoConverter.xml
+D:\Projects\HighlightPlayer\HighlightLib\obj\Release\HighlightLib.csprojResolveAssemblyReference.cache
+D:\Projects\HighlightPlayer\HighlightLib\obj\Release\HighlightLib.csproj.CoreCompileInputs.cache
+D:\Projects\HighlightPlayer\HighlightLib\obj\Release\HighlightLib.dll
+D:\Projects\HighlightPlayer\HighlightLib\obj\Release\HighlightLib.pdb

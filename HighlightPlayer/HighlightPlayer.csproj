@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{46542401-AB08-4352-A55D-3E50DA8A8267}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HighlightPlayer</RootNamespace>
+    <AssemblyName>HighlightPlayer</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\Buttons\Base\BackgroundColorStateButtonSource.cs" />
+    <Compile Include="Controls\Buttons\Base\ButtonStateChangedEventArgs.cs" />
+    <Compile Include="Controls\Buttons\Base\ButtonStateChangingEventArgs.cs" />
+    <Compile Include="Controls\Buttons\ShowHighlightsButtonStates.cs" />
+    <Compile Include="Controls\HighlightsCountConverter.cs" />
+    <Compile Include="Controls\MediaElement\CurrentHighlights.cs" />
+    <Compile Include="Controls\MediaElement\CurrentHighlightsChangedEventArgs.cs" />
+    <Compile Include="Controls\DataGrid\HighlightsDataGrid.cs" />
+    <Compile Include="Controls\DataGrid\TimeSpanConverter.cs" />
+    <Compile Include="Controls\MediaElement\HighlightMediaElement.xaml.cs">
+      <DependentUpon>HighlightMediaElement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Buttons\Base\StateButtonSource.cs" />
+    <Compile Include="Controls\Buttons\Base\IconRenderer.cs" />
+    <Compile Include="Controls\MediaElement\HighlightTimeLine.cs" />
+    <Compile Include="Controls\MediaFilesDataGrid.cs" />
+    <Compile Include="Converter\ColumnNumberConverter.cs" />
+    <Compile Include="Converter\CurrentHighlightsWidthConverter.cs" />
+    <Compile Include="Converter\DurationToTimeSpanConverter.cs" />
+    <Compile Include="Converter\MediaFileNameConverter.cs" />
+    <Compile Include="Converter\SwitchViewToVisibilityConverter.cs" />
+    <Compile Include="Converter\TimerIntervalToMinChangeConverter.cs" />
+    <Compile Include="Converter\PlayTypeToBoolConverter.cs" />
+    <Compile Include="Converter\HighlightToEndConverter.cs" />
+    <Compile Include="Controls\DataGrid\RatingConverter.cs" />
+    <Compile Include="Converter\MediaFileUriConverter.cs" />
+    <Compile Include="Converter\MediaStateConverter.cs" />
+    <Compile Include="Converter\VerticalAlignmentConverter.cs" />
+    <Compile Include="CurrentMediaFileChangedEventArgs.cs" />
+    <Compile Include="MediaFileCollection.cs" />
+    <Compile Include="IMediaFileCollection.cs" />
+    <Compile Include="ShuffleCompleteMediaFileCollection.cs" />
+    <Compile Include="ShuffleOneMediaFileCollection.cs" />
+    <Compile Include="Converter\MediaFileToHighlightCollectionConverter.cs" />
+    <Compile Include="ViewModel.cs" />
+    <Page Include="Controls\MediaElement\HighlightMediaElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Slider\MediaPositionSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\Buttons\Base\BackgroundColorButtonState.cs" />
+    <Compile Include="Controls\Buttons\Base\ButtonState.cs" />
+    <Compile Include="Controls\Buttons\Base\StateButton.cs" />
+    <Compile Include="Controls\Buttons\HighlightButtonStates.cs" />
+    <Compile Include="Controls\Buttons\LoopButtonStates.cs" />
+    <Compile Include="Controls\Buttons\NextHighlightButtonStates.cs" />
+    <Compile Include="Controls\Buttons\NextMediaButtonStates.cs" />
+    <Compile Include="Controls\Buttons\PlayPauseButtonStates.cs" />
+    <Compile Include="Controls\Buttons\PreviousHighlightButtonStates.cs" />
+    <Compile Include="Controls\Buttons\PreviousMediaButtonStates.cs" />
+    <Compile Include="Controls\Buttons\ShuffleButtonStates.cs" />
+    <Compile Include="Controls\Buttons\StopButtonStates.cs" />
+    <Compile Include="Controls\Buttons\SwitchButtonStates.cs" />
+    <Compile Include="Controls\Slider\MediaPositionChangedEventArgs.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSliderHighlightElementsList.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSlider.xaml.cs">
+      <DependentUpon>MediaPositionSlider.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Slider\MediaPositionSliderHighlightElement.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSliderElement.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSliderEndHighlightElement.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSliderPositionElement.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSliderProceededElement.cs" />
+    <Compile Include="Controls\Slider\MediaPositionSliderUnproceededElement.cs" />
+    <Compile Include="Controls\Buttons\PlayTypeButtonStates.cs" />
+    <Compile Include="HighlightExtension.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HighlightLib\HighlightLib.csproj">
+      <Project>{5f053784-9daf-40b9-9250-037bfd300b44}</Project>
+      <Name>HighlightLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

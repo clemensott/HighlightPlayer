@@ -1,0 +1,28 @@
+C:\Users\Clemens\Documents\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\HighlightLib.dll
+C:\Users\Clemens\Documents\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\HighlightLib.pdb
+C:\Users\Clemens\Documents\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\ID3TagLib.dll
+C:\Users\Clemens\Documents\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.dll
+C:\Users\Clemens\Documents\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.pdb
+C:\Users\Clemens\Documents\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.csprojResolveAssemblyReference.cache
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\HighlightLib.dll
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\HighlightLib.pdb
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\ID3TagLib.dll
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.csproj.CoreCompileInputs.cache
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.dll
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.pdb
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\GleamTech.Core.dll
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\NReco.VideoConverter.dll
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\GleamTech.Core.xml
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\bin\Debug\NReco.VideoConverter.xml
+D:\Dokumente\Visual Studio 2015\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.csprojResolveAssemblyReference.cache
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\HighlightLib.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\HighlightLib.pdb
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\GleamTech.Core.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\ID3TagLib.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\NReco.VideoConverter.dll
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\GleamTech.Core.xml
+D:\Projects\HighlightPlayer\HighlightLib\bin\Debug\NReco.VideoConverter.xml
+D:\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.csproj.CoreCompileInputs.cache
+D:\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.dll
+D:\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.pdb
+D:\Projects\HighlightPlayer\HighlightLib\obj\Debug\HighlightLib.csprojResolveAssemblyReference.cache

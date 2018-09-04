@@ -1,0 +1,243 @@
+﻿using HighlightLib;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+
+namespace HighlightPlayer.Controls
+{
+    class HighlightsDataGrid : DataGrid
+    {
+        private const string columnHeaderBegin = "Begin", columnHeaderEnd = "End",
+            columnHeaderRating = "Rating", columnHeaderComment = "Comment";
+
+        private static readonly Brush rowSelectedBrush = Brushes.LightBlue, rowUnselectedBrush = Brushes.Transparent;
+
+        public static readonly DependencyProperty HighlightsSourceProperty =
+            DependencyProperty.Register("HighlightsSource", typeof(HighlightCollection), typeof(HighlightsDataGrid),
+                new PropertyMetadata(null, new PropertyChangedCallback(OnHighlightsSourcePropertyChanged)));
+
+        private static void OnHighlightsSourcePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var s = (HighlightsDataGrid)sender;
+            var value = (HighlightCollection)e.NewValue;
+
+            s.ItemsSource = value;
+        }
+
+        public static readonly DependencyProperty CurrentHighlightsProperty =
+            DependencyProperty.Register("CurrentHighlights", typeof(CurrentHighlights), typeof(HighlightsDataGrid),
+                new PropertyMetadata(null, new PropertyChangedCallback(OnCurrentHighlightsPropertyChanged)));
+
+        private static void OnCurrentHighlightsPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var s = (HighlightsDataGrid)sender;
+            var oldValue = (CurrentHighlights)e.OldValue;
+            var newValue = (CurrentHighlights)e.NewValue;
+
+            if (oldValue != null) oldValue.CollectionChanged -= s.OnCollectionChanged;
+            if (newValue != null) newValue.CollectionChanged += s.OnCollectionChanged;
+
+            s.HighlightRows();
+        }
+
+        public HighlightCollection HighlightsSource
+        {
+            get { return (HighlightCollection)GetValue(HighlightsSourceProperty); }
+            set { SetValue(HighlightsSourceProperty, value); }
+        }
+
+        public CurrentHighlights CurrentHighlights
+        {
+            get { return (CurrentHighlights)GetValue(CurrentHighlightsProperty); }
+            set { SetValue(CurrentHighlightsProperty, value); }
+        }
+
+        private Dictionary<Highlight, DataGridRow> rows;
+
+        public HighlightsDataGrid()
+        {
+            SelectionUnit = DataGridSelectionUnit.Cell;
+            AutoGenerateColumns = true;
+            RowHeaderWidth = 0;
+
+            rows = new Dictionary<Highlight, DataGridRow>();
+        }
+
+        protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+            base.OnItemsSourceChanged(oldValue, newValue);
+
+            if (newValue is HighlightCollection) HighlightsSource = newValue as HighlightCollection;
+        }
+
+        protected override void OnAutoGeneratingColumn(DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridBoundColumn column = e.Column as DataGridBoundColumn;
+            Binding binding = column.Binding as Binding;
+
+            switch (column.Header)
+            {
+                case columnHeaderBegin:
+                    column.MinWidth = 50;
+                    column.SortDirection = ListSortDirection.Ascending;
+
+                    binding.Converter = new TimeSpanConverter();
+                    binding.Mode = BindingMode.TwoWay;
+                    binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
+                    break;
+
+                case columnHeaderEnd:
+                    column.MinWidth = 50;
+
+                    binding.Converter = new TimeSpanConverter();
+                    binding.Mode = BindingMode.TwoWay;
+                    binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
+                    break;
+
+                case columnHeaderRating:
+                    column.MinWidth = 50;
+
+                    binding.Converter = new RatingConverter();
+                    binding.Mode = BindingMode.TwoWay;
+                    binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
+                    break;
+
+                case columnHeaderComment:
+                    column.DisplayIndex = 3;
+                    column.MinWidth = 50;
+                    column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                    break;
+
+                default:
+                    e.Cancel = true;
+                    break;
+            }
+
+            base.OnAutoGeneratingColumn(e);
+        }
+
+        protected override void OnAutoGeneratedColumns(EventArgs e)
+        {
+            Columns.First(c => (string)c.Header == columnHeaderBegin).DisplayIndex = 0;
+            Columns.First(c => (string)c.Header == columnHeaderEnd).DisplayIndex = 1;
+            Columns.First(c => (string)c.Header == columnHeaderRating).DisplayIndex = 2;
+            Columns.First(c => (string)c.Header == columnHeaderComment).DisplayIndex = 3;
+
+            base.OnAutoGeneratedColumns(e);
+        }
+
+        protected override void OnLoadingRow(DataGridRowEventArgs e)
+        {
+            Highlight highlight = e.Row.DataContext as Highlight;
+
+            if (highlight == null) return;
+
+            rows.Add(highlight, e.Row);
+
+            bool isHighlighted = CurrentHighlights?.Contains(highlight) ?? false;
+            e.Row.Background = isHighlighted ? rowSelectedBrush : rowUnselectedBrush;
+
+            highlight.BeginChanged += Highlight_BeginChanged;
+            highlight.EndChanged += Highlight_EndChanged;
+            highlight.RatingChanged += Highlight_RatingChanged;
+            highlight.CommentChanged += Highlight_CommentChanged;
+            e.Row.KeyDown += Row_KeyDown;
+
+            base.OnLoadingRow(e);
+        }
+
+        protected override void OnUnloadingRow(DataGridRowEventArgs e)
+        {
+            Highlight highlight = e.Row.DataContext as Highlight;
+
+            if (highlight == null) return;
+
+            rows.Remove(highlight);
+
+            highlight.BeginChanged -= Highlight_BeginChanged;
+            highlight.EndChanged -= Highlight_EndChanged;
+            highlight.RatingChanged -= Highlight_RatingChanged;
+            highlight.CommentChanged -= Highlight_CommentChanged;
+            e.Row.KeyDown += Row_KeyDown;
+
+            base.OnUnloadingRow(e);
+        }
+
+        private void Highlight_BeginChanged(Highlight sender, TimeChangedEventArgs args)
+        {
+            UpdateCell(sender, columnHeaderBegin);
+        }
+
+        private void Highlight_EndChanged(Highlight sender, TimeChangedEventArgs args)
+        {
+            UpdateCell(sender, columnHeaderEnd);
+        }
+
+        private void Highlight_RatingChanged(Highlight sender, RatingChangedEventArgs args)
+        {
+            UpdateCell(sender, columnHeaderRating);
+        }
+
+        private void Highlight_CommentChanged(Highlight sender, CommentChangedEventArgs args)
+        {
+            UpdateCell(sender, columnHeaderComment);
+        }
+
+        private void UpdateCell(Highlight highlight, string columnName)
+        {
+            DataGridColumn column = Columns.FirstOrDefault(c => c.Header.ToString() == columnName);
+            TextBlock cell = column?.GetCellContent(highlight) as TextBlock;
+            BindingExpression bindingExpression = cell?.GetBindingExpression(TextBlock.TextProperty);
+
+            bindingExpression?.UpdateTarget();
+        }
+
+        private void Row_KeyDown(object sender, KeyEventArgs e)
+        {
+            HighlightsSource?.Remove((sender as DataGridRow).DataContext as Highlight);
+        }
+
+        private void HighlightRows()
+        {
+            foreach (KeyValuePair<Highlight, DataGridRow> pair in rows)
+            {
+                bool isCurrentHighlight = CurrentHighlights?.Contains(pair.Key) ?? false;
+                pair.Value.Background = isCurrentHighlight ? rowSelectedBrush : rowUnselectedBrush;
+            }
+        }
+
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Highlight newHighlight = e.NewItems?.OfType<Highlight>().FirstOrDefault();
+            Highlight oldHighlight = e.OldItems?.OfType<Highlight>().FirstOrDefault();
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    if (rows.Keys.Contains(newHighlight)) rows[newHighlight].Background = rowSelectedBrush;
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    if (rows.Keys.Contains(oldHighlight)) rows[oldHighlight].Background = rowUnselectedBrush;
+                    break;
+
+                case NotifyCollectionChangedAction.Replace:
+                    if (rows.Keys.Contains(newHighlight)) rows[newHighlight].Background = rowSelectedBrush;
+                    if (rows.Keys.Contains(oldHighlight)) rows[oldHighlight].Background = rowUnselectedBrush;
+                    break;
+
+                case NotifyCollectionChangedAction.Reset:
+                    HighlightRows();
+                    break;
+            }
+        }
+    }
+}
